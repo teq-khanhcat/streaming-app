@@ -3,17 +3,17 @@ import { motion, useAnimation } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 
 interface SlipCardsProps {
-    onFinish: (keyword: string) => void
+  onFinish: (keyword: string) => void;
 }
 function SlipCards({ onFinish }: SlipCardsProps) {
   const [current, setCurrent] = useState(0);
   const controls = useAnimation();
-  const iterationsRef = useRef(0);
   const canceledRef = useRef(false);
 
   const cycleLength = 3;
 
-  const [maxIterations] = useState(() => Math.floor(Math.random() * 5) + 10);
+  //   const [maxIterations] = useState(() => Math.floor(Math.random() * 5) + 10);
+  const totalIterationsRef = useRef(0);
 
   useEffect(() => {
     canceledRef.current = false;
@@ -21,15 +21,14 @@ function SlipCards({ onFinish }: SlipCardsProps) {
     const run = async () => {
       if (canceledRef.current) return;
 
-      iterationsRef.current += 1;
-      const cycleIndex = (iterationsRef.current - 1) % cycleLength;
+      totalIterationsRef.current += 1;
+      const cycleIndex = (totalIterationsRef.current - 1) % cycleLength;
 
       let nextIndex = 0;
 
       if (cycleIndex === 0 || cycleIndex === 2) {
         nextIndex = 0; // id 1
       } else {
-        // random không trùng với id1
         nextIndex = Math.floor(Math.random() * (keywords.length - 1)) + 1;
       }
 
@@ -41,15 +40,8 @@ function SlipCards({ onFinish }: SlipCardsProps) {
         transition: { duration: 0.15, ease: "easeOut" },
       });
 
-      if (!canceledRef.current && iterationsRef.current < maxIterations) {
+      if (!canceledRef.current) {
         setTimeout(run, 50);
-      } else {
-        onFinish(keywords[nextIndex].name);
-
-        setTimeout(() => {
-          iterationsRef.current = 0;
-          run();
-        }, 180000);
       }
     };
 
@@ -58,10 +50,17 @@ function SlipCards({ onFinish }: SlipCardsProps) {
     return () => {
       canceledRef.current = true;
     };
-  }, [controls, maxIterations, onFinish]);
+  }, [controls]);
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: 120 }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: 120,
+      }}
+    >
       <motion.div
         animate={controls}
         style={{

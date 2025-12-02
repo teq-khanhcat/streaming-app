@@ -1,9 +1,11 @@
+/* eslint-disable @next/next/no-img-element */
 // PlaylistSlip.tsx
 import { motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import { keywords } from "@/constants/keywords";
 import { Box, Typography } from "@mui/material";
 import { FastForward, FastRewind, PauseCircle } from "@mui/icons-material";
+import Image from "next/image";
 
 interface PlaylistSlipProps {
   onFinish?: (keyword: string) => void;
@@ -12,7 +14,7 @@ interface PlaylistSlipProps {
 
 export default function PlaylistSlip({
   onFinish,
-  interval = 3000,
+  interval = 180000,
 }: PlaylistSlipProps) {
   const [index, setIndex] = useState(0);
   const [displayIndex, setDisplayIndex] = useState(0);
@@ -78,7 +80,7 @@ export default function PlaylistSlip({
 
   const handleClick = () => {
     if (center) {
-      const url = `IChttps://www.youtube.com/results?search_query=${encodeURIComponent(
+      const url = `https://www.youtube.com/results?search_query=${encodeURIComponent(
         center.slug
       )}`;
       window.open(url, "_blank");
@@ -102,7 +104,6 @@ export default function PlaylistSlip({
       }}
     >
       <div style={{ width: "100%", position: "relative" }}>
-        {/* top (half visible) */}
         <motion.div
           key={`top-${top.id}-${animKey}`}
           initial={{ y: -115, opacity: 0 }}
@@ -143,7 +144,9 @@ export default function PlaylistSlip({
                   overflow: "hidden",
                   backgroundColor: "white",
                 }}
-              ></Box>
+              >
+                <img width={30} height={30} src={top.thumnail} alt="thumbnail" />
+              </Box>
 
               <Typography
                 sx={{
@@ -205,7 +208,9 @@ export default function PlaylistSlip({
                   overflow: "hidden",
                   backgroundColor: "white",
                 }}
-              ></Box>
+              >
+                <img width={36} height={36} src={center.thumnail} alt="thumbnail" />
+              </Box>
 
               <Typography
                 sx={{
@@ -265,7 +270,9 @@ export default function PlaylistSlip({
                   overflow: "hidden",
                   backgroundColor: "white",
                 }}
-              ></Box>
+              >
+                <img width={30} height={30} src={bottom.thumnail} alt="thumbnail" />
+              </Box>
 
               <Typography
                 sx={{

@@ -1,6 +1,7 @@
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
 import Navbar from "@/components/Layout/Navbar";
+import { Box } from "@mui/material";
 
 export default function Home() {
   return (
@@ -14,8 +15,51 @@ export default function Home() {
       <div
         className={`${styles.page}`}
       >
-        <main className={styles.main}>
-          <Navbar />
+        <main className={styles.main} style={{ position: "relative", zIndex: 0 }}>
+          <Box
+            sx={{
+              width: "100%",
+              minHeight: "100vh",
+              position: "relative",
+              overflow: "hidden",
+              display: "block",
+
+              // Background image with transition
+              "&::before": {
+                content: '""',
+                position: "absolute",
+                inset: 0,
+                backgroundImage: 'url("/home.png")',
+                backgroundSize: "cover",
+                backgroundPosition: "center 10%", 
+                backgroundRepeat: "no-repeat",
+
+                // Start state for animation
+                opacity: 0,
+                transform: "scale(1.02)",
+
+                // Fade + zoom when page renders
+                animation: "bgFadeZoom 0.8s ease-out forwards",
+
+                // Extra blur + darken
+                // filter: "blur(4px) brightness(0.55)",
+
+                zIndex: -2,
+              },
+
+              // Overlay gradient
+              "&::after": {
+                content: '""',
+                position: "absolute",
+                inset: 0,
+                background:
+                  "linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.6))",
+                zIndex: -1,
+              },
+            }}
+          >
+            <Navbar />
+          </Box>
         </main>
       </div>
     </>

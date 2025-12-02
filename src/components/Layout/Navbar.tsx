@@ -28,7 +28,7 @@ function Navbar() {
         <Typography
           key={index}
           sx={{ 
-            color: activeItem === nav.label ? "#90B77D" : "#212121", 
+            color: activeItem === nav.label ? "#90B77D" : "#F4D793", 
             fontSize: "20px", 
             cursor: 'pointer',
             transition: "color 0.3s ease",

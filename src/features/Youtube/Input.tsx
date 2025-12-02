@@ -22,10 +22,11 @@ export default function Input({ url }: InputProps) {
       }}
       sx={{
         "& .MuiOutlinedInput-root": {
+          backgroundColor: "rgba(255, 255, 255, 0.2)",
           cursor: "pointer",
           "& input": {
             cursor: "pointer",
-            color: '#1C352D',
+            color: '#90B77D',
             fontWeight: 'medium'
           },
           borderRadius: 2,

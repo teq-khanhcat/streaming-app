@@ -13,25 +13,68 @@ function Youtube() {
   : "";
 
   return (
-    <main className={styles.main}>
-      <Navbar />
-      <Title />
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          width: "100%",
-          alignItems: "center",
+    <main className={styles.main} style={{ position: "relative", zIndex: 0 }}>
+  <Box
+    sx={{
+      width: "100%",
+      minHeight: "100vh",
+      position: "relative",
+      overflow: "hidden",
+      display: "block",
+
+      // Background image with transition
+      "&::before": {
+        content: '""',
+        position: "absolute",
+        inset: 0,
+        backgroundImage: 'url("/background.png")',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+
+        // Start state for animation
+        opacity: 0,
+        transform: "scale(1.02)",
+
+        // Fade + zoom when page renders
+        animation: "bgFadeZoom 0.8s ease-out forwards",
+
+        // Extra blur + darken
+        filter: "blur(4px) brightness(0.55)",
+
+        zIndex: -2,
+      },
+
+      // Overlay gradient
+      "&::after": {
+        content: '""',
+        position: "absolute",
+        inset: 0,
+        background:
+          "linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.6))",
+        zIndex: -1,
+      },
+    }}
+  >
+    <Navbar />
+    <Title />
+    <Box sx={{ display: "flex", flexDirection: "column", width: "100%", alignItems: "center" }}>
+      <SlipCards
+        onFinish={(keyword) => {
+          setFinalKeyword(
+            `https://www.youtube.com/results?search_query=${encodeURIComponent(
+              keyword
+            )}`
+          );
         }}
-      >
-        <SlipCards onFinish={(keyword) => {
-          setFinalKeyword(`https://www.youtube.com/results?search_query=${encodeURIComponent(keyword)}`);
-        }} />
-        <Box sx={{ px: 16, width: "100%" }}>
-          <Input url={youtubeUrl} />
-        </Box>
+      />
+      <Box sx={{ px: 16, width: "100%" }}>
+        <Input url={youtubeUrl} />
       </Box>
-    </main>
+    </Box>
+  </Box>
+</main>
+
   );
 }
 

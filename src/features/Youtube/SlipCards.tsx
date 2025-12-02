@@ -1,89 +1,291 @@
-import { keywords } from "@/constants/keywords";
-import { motion, useAnimation } from "framer-motion";
+// PlaylistSlip.tsx
+import { motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
+import { keywords } from "@/constants/keywords";
+import { Box, Typography } from "@mui/material";
+import { FastForward, FastRewind, PauseCircle } from "@mui/icons-material";
 
-interface SlipCardsProps {
-    onFinish: (keyword: string) => void
+interface PlaylistSlipProps {
+  onFinish?: (keyword: string) => void;
+  interval?: number;
 }
-function SlipCards({ onFinish }: SlipCardsProps) {
-  const [current, setCurrent] = useState(0);
-  const controls = useAnimation();
-  const iterationsRef = useRef(0);
-  const canceledRef = useRef(false);
 
-  const cycleLength = 3;
+export default function PlaylistSlip({
+  onFinish,
+  interval = 3000,
+}: PlaylistSlipProps) {
+  const [index, setIndex] = useState(0);
+  const [displayIndex, setDisplayIndex] = useState(0);
+  const [animKey, setAnimKey] = useState(0);
 
-//   const [maxIterations] = useState(() => Math.floor(Math.random() * 5) + 10);
+  const runningRef = useRef(false);
 
   useEffect(() => {
-  canceledRef.current = false;
+    const timer = setInterval(() => {
+      runFakeShuffle();
+    }, interval);
 
-  const runShuffle = () => {
-    iterationsRef.current = 0;
-    const maxIterationsLocal = Math.floor(Math.random() * 5) + 10;
+    return () => clearInterval(timer);
+  }, [index]);
 
-    const run = async () => {
-      if (canceledRef.current) return;
+  const indexRef = useRef(0);
 
-      iterationsRef.current += 1;
-      const cycleIndex = (iterationsRef.current - 1) % cycleLength;
+  const runFakeShuffle = () => {
+    if (runningRef.current) return;
+    runningRef.current = true;
 
-      let nextIndex = 0;
+    const totalSteps = keywords.length;
+    const speed = 120;
 
-      if (cycleIndex === 0 || cycleIndex === 2) {
-        nextIndex = 0; // id 1
-      } else {
-        nextIndex = Math.floor(Math.random() * (keywords.length - 1)) + 1;
+    let count = 0;
+    let tempIndex = indexRef.current;
+
+    const loop = setInterval(() => {
+      tempIndex = (tempIndex + 1) % keywords.length;
+
+      setDisplayIndex(tempIndex);
+      setAnimKey((k) => k + 1);
+
+      count++;
+
+      if (count >= totalSteps) {
+        clearInterval(loop);
+
+        const next = (indexRef.current + 1) % keywords.length;
+        indexRef.current = next; // update ref
+        setIndex(next);
+        setDisplayIndex(next);
+        setAnimKey((k) => k + 1);
+
+        if (onFinish) onFinish(keywords[next].name);
+
+        runningRef.current = false;
       }
-
-      setCurrent(nextIndex);
-
-      await controls.start({
-        y: [-50, 0],
-        opacity: [0, 1],
-        transition: { duration: 0.15, ease: "easeOut" },
-      });
-
-      if (!canceledRef.current && iterationsRef.current < maxIterationsLocal) {
-        setTimeout(run, 50);
-      } else {
-        onFinish(keywords[nextIndex].name);
-
-        setTimeout(runShuffle, 180000);
-      }
-    };
-
-    run();
+    }, speed);
   };
 
-  runShuffle();
+  useEffect(() => {
+    const timer = setInterval(() => {
+      runFakeShuffle();
+    }, interval);
 
-  return () => {
-    canceledRef.current = true;
+    return () => clearInterval(timer);
+  }, []);
+
+  const center = keywords[displayIndex];
+  const top = keywords[(displayIndex - 1 + keywords.length) % keywords.length];
+  const bottom = keywords[(displayIndex + 1) % keywords.length];
+
+  const handleClick = () => {
+    if (center) {
+      const url = `IChttps://www.youtube.com/results?search_query=${encodeURIComponent(
+        center.slug
+      )}`;
+      window.open(url, "_blank");
+    }
   };
-}, [controls, onFinish]);
-
-
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: 120 }}>
-      <motion.div
-        animate={controls}
-        style={{
-          fontSize: 20,
-          fontWeight: 500,
-          minWidth: 0,
-          textAlign: "center",
-          backgroundColor: keywords[current].color,
-          borderRadius: 4,
-          padding: "4px 8px",
-          color: "white",
-        }}
-      >
-        {keywords[current].name}
-      </motion.div>
-    </div>
+    <Box
+      sx={{
+        position: "relative",
+        height: 100,
+        width: "100%",
+        px: 16,
+        py: 16,
+        pb: 20,
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div style={{ width: "100%", position: "relative" }}>
+        {/* top (half visible) */}
+        <motion.div
+          key={`top-${top.id}-${animKey}`}
+          initial={{ y: -115, opacity: 0 }}
+          animate={{ y: -65, opacity: 0.5, scale: 0.96 }}
+          exit={{ y: -80, opacity: 0 }}
+          transition={{ duration: 0.12 }}
+          style={{
+            position: "absolute",
+            left: 8,
+            right: 8,
+            height: 56,
+            background: "rgba(255,255,255,0.1)",
+            borderRadius: 4,
+            display: "flex",
+            alignItems: "center",
+            color: "white",
+            fontSize: 18,
+            boxShadow: "0 4px 18px rgba(0,0,0,0.35)",
+            backdropFilter: "blur(6px)",
+            zIndex: 1,
+            cursor: "pointer",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
+              px: 4,
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Box
+                sx={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: 2,
+                  overflow: "hidden",
+                  backgroundColor: "white",
+                }}
+              ></Box>
+
+              <Typography
+                sx={{
+                  fontFamily: "Inter, sans-serif !important",
+                  color: "#F4D793",
+                  fontWeight: "medium",
+                }}
+              >
+                {top.name}
+              </Typography>
+            </Box>
+
+            <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
+              <FastRewind sx={{ color: "white" }} />
+              <PauseCircle sx={{ color: "white" }} />
+              <FastForward sx={{ color: "white" }} />
+            </Box>
+          </Box>
+        </motion.div>
+
+        <motion.div
+          key={`center-${center.id}-${animKey}`}
+          initial={{ y: 60, opacity: 0 }}
+          animate={{ y: 0, opacity: 1, scale: 1 }}
+          exit={{ y: 80, opacity: 0 }}
+          transition={{ duration: 0.12 }}
+          onClick={handleClick}
+          style={{
+            position: "absolute",
+            left: 8,
+            right: 8,
+            height: 72,
+            background: "rgba(255,255,255,0.5)",
+            borderRadius: 4,
+            display: "flex",
+            alignItems: "center",
+            color: "white",
+            fontSize: 22,
+            fontWeight: "medium",
+            boxShadow: "0 10px 30px rgba(0,0,0,0.45)",
+            backdropFilter: "blur(8px)",
+            cursor: "pointer",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
+              px: 4,
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Box
+                sx={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: 2,
+                  overflow: "hidden",
+                  backgroundColor: "white",
+                }}
+              ></Box>
+
+              <Typography
+                sx={{
+                  fontFamily: "Inter, sans-serif !important",
+                  color: "#F4D793",
+                  fontWeight: "medium",
+                }}
+              >
+                {center.name}
+              </Typography>
+            </Box>
+
+            <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
+              <FastRewind sx={{ color: "white" }} />
+              <PauseCircle sx={{ color: "white" }} />
+              <FastForward sx={{ color: "white" }} />
+            </Box>
+          </Box>
+        </motion.div>
+
+        <motion.div
+          key={`bottom-${bottom.id}-${animKey}`}
+          initial={{ y: 120, opacity: 0 }}
+          animate={{ y: 80, opacity: 0.5, scale: 0.96 }}
+          exit={{ y: 160, opacity: 0 }}
+          transition={{ duration: 0.12 }}
+          style={{
+            position: "absolute",
+            left: 8,
+            right: 8,
+            height: 56,
+            background: "rgba(255,255,255,0.1)",
+            borderRadius: 4,
+            display: "flex",
+            alignItems: "center",
+            color: "white",
+            fontSize: 18,
+            boxShadow: "0 4px 18px rgba(0,0,0,0.30)",
+            backdropFilter: "blur(6px)",
+            cursor: "pointer",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
+              padding: 4,
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Box
+                sx={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: 2,
+                  overflow: "hidden",
+                  backgroundColor: "white",
+                }}
+              ></Box>
+
+              <Typography
+                sx={{
+                  fontFamily: "Inter, sans-serif !important",
+                  color: "#F4D793",
+                  fontWeight: "medium",
+                }}
+              >
+                {bottom.name}
+              </Typography>
+            </Box>
+
+            <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
+              <FastRewind sx={{ color: "white" }} />
+              <PauseCircle sx={{ color: "white" }} />
+              <FastForward sx={{ color: "white" }} />
+            </Box>
+          </Box>
+        </motion.div>
+      </div>
+    </Box>
   );
 }
-
-export default SlipCards;

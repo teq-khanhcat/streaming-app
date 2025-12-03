@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 // PlaylistSlip.tsx
 import { motion } from "framer-motion";
@@ -5,7 +6,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { keywords } from "@/constants/keywords";
 import { Box, Typography } from "@mui/material";
 import { FastForward, FastRewind, PauseCircle } from "@mui/icons-material";
-import Image from "next/image";
 
 interface PlaylistSlipProps {
   onFinish?: (keyword: string) => void;

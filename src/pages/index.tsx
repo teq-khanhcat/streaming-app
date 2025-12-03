@@ -2,6 +2,7 @@ import Head from "next/head";
 import styles from "@/styles/Home.module.css";
 import Navbar from "@/components/Layout/Navbar";
 import { Box } from "@mui/material";
+import Title from "@/features/Home/Title";
 
 export default function Home() {
   return (
@@ -12,10 +13,11 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div
-        className={`${styles.page}`}
-      >
-        <main className={styles.main} style={{ position: "relative", zIndex: 0 }}>
+      <div className={`${styles.page}`}>
+        <main
+          className={styles.main}
+          style={{ position: "relative", zIndex: 0 }}
+        >
           <Box
             sx={{
               width: "100%",
@@ -31,7 +33,7 @@ export default function Home() {
                 inset: 0,
                 backgroundImage: 'url("/home.png")',
                 backgroundSize: "cover",
-                backgroundPosition: "center 10%", 
+                backgroundPosition: "center 10%",
                 backgroundRepeat: "no-repeat",
 
                 // Start state for animation
@@ -58,7 +60,20 @@ export default function Home() {
               },
             }}
           >
-            <Navbar />
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyItems: "space-between",
+                height: '100vh'
+              }}
+            >
+              <Navbar />
+
+              <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: "center", }}>
+                <Title />
+              </Box>
+            </Box>
           </Box>
         </main>
       </div>

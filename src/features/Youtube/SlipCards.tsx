@@ -9,12 +9,10 @@ import { FastForward, FastRewind, PauseCircle } from "@mui/icons-material";
 
 interface PlaylistSlipProps {
   onFinish?: (keyword: string) => void;
-  interval?: number;
 }
 
 export default function PlaylistSlip({
   onFinish,
-  interval = 180000,
 }: PlaylistSlipProps) {
   const [index, setIndex] = useState(0);
   const [displayIndex, setDisplayIndex] = useState(0);
@@ -22,13 +20,13 @@ export default function PlaylistSlip({
 
   const runningRef = useRef(false);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      runFakeShuffle();
-    }, interval);
+  // useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     runFakeShuffle();
+  //   }, interval);
 
-    return () => clearInterval(timer);
-  }, [index]);
+  //   return () => clearInterval(timer);
+  // }, [index]);
 
   const indexRef = useRef(0);
 
@@ -66,13 +64,24 @@ export default function PlaylistSlip({
     }, speed);
   };
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      runFakeShuffle();
-    }, interval);
+  // useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     runFakeShuffle();
+  //   }, interval);
 
-    return () => clearInterval(timer);
-  }, []);
+  //   return () => clearInterval(timer);
+  // }, []);
+
+  useEffect(() => {
+    const current = keywords[index];
+    const ms = (current.duration ?? 180) * 1000;
+
+    const timer = setTimeout(() => {
+      runFakeShuffle();
+    }, ms);
+
+    return () => clearTimeout(timer);
+  }, [index]);
 
   const center = keywords[displayIndex];
   const top = keywords[(displayIndex - 1 + keywords.length) % keywords.length];
@@ -91,10 +100,10 @@ export default function PlaylistSlip({
     <Box
       sx={{
         position: "relative",
-        height: 100,
+        height: 80,
         width: "100%",
         px: 16,
-        py: 16,
+        pt: 12,
         pb: 20,
         overflow: "hidden",
         display: "flex",
@@ -145,7 +154,12 @@ export default function PlaylistSlip({
                   backgroundColor: "white",
                 }}
               >
-                <img width={30} height={30} src={top.thumnail} alt="thumbnail" />
+                <img
+                  width={30}
+                  height={30}
+                  src={top.thumbnail}
+                  alt="thumbnail"
+                />
               </Box>
 
               <Typography
@@ -209,7 +223,12 @@ export default function PlaylistSlip({
                   backgroundColor: "white",
                 }}
               >
-                <img width={36} height={36} src={center.thumnail} alt="thumbnail" />
+                <img
+                  width={36}
+                  height={36}
+                  src={center.thumbnail}
+                  alt="thumbnail"
+                />
               </Box>
 
               <Typography
@@ -271,7 +290,12 @@ export default function PlaylistSlip({
                   backgroundColor: "white",
                 }}
               >
-                <img width={30} height={30} src={bottom.thumnail} alt="thumbnail" />
+                <img
+                  width={30}
+                  height={30}
+                  src={bottom.thumbnail}
+                  alt="thumbnail"
+                />
               </Box>
 
               <Typography

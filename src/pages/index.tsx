@@ -3,6 +3,7 @@ import styles from "@/styles/Home.module.css";
 import Navbar from "@/components/Layout/Navbar";
 import { Box } from "@mui/material";
 import Title from "@/features/Home/Title";
+import Messages from "@/features/Home/Messages";
 
 export default function Home() {
   return (
@@ -26,7 +27,6 @@ export default function Home() {
               overflow: "hidden",
               display: "block",
 
-              // Background image with transition
               "&::before": {
                 content: '""',
                 position: "absolute",
@@ -36,20 +36,14 @@ export default function Home() {
                 backgroundPosition: "center 10%",
                 backgroundRepeat: "no-repeat",
 
-                // Start state for animation
                 opacity: 0,
                 transform: "scale(1.02)",
 
-                // Fade + zoom when page renders
                 animation: "bgFadeZoom 0.8s ease-out forwards",
-
-                // Extra blur + darken
-                // filter: "blur(4px) brightness(0.55)",
 
                 zIndex: -2,
               },
 
-              // Overlay gradient
               "&::after": {
                 content: '""',
                 position: "absolute",
@@ -70,8 +64,11 @@ export default function Home() {
             >
               <Navbar />
 
-              <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: "center", }}>
-                <Title />
+              <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: "center", height: '100%' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Messages />
+                  <Title />
+                </Box>
               </Box>
             </Box>
           </Box>

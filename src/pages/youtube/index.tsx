@@ -6,6 +6,7 @@ import SlipCards from "@/features/Youtube/SlipCards";
 import { Box } from "@mui/material";
 // import Input from "@/features/Youtube/Input";
 import Head from "next/head";
+import Butterfly from "@/components/animations/Butterfly";
 
 function Youtube() {
   const [finalKeyword, setFinalKeyword] = useState<string | null>(null);
@@ -85,9 +86,7 @@ function Youtube() {
                 );
               }}
             />
-            {/* <Box sx={{ px: 16, width: "100%" }}>
-              <Input url={youtubeUrl} />
-            </Box> */}
+            <Butterfly />
           </Box>
         </Box>
       </main>

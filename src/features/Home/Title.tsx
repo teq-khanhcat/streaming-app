@@ -1,86 +1,34 @@
-import { Box, Typography } from "@mui/material";
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
-import { Merriweather } from "next/font/google";
 import { motion } from "framer-motion";
 
-export const merri = Merriweather({
+import { Domine } from "next/font/google";
+import { Box } from "@mui/material";
+
+export const domine = Domine({
   subsets: ["latin"],
-  weight: ["300", "400", "700", "900"],
-  variable: "--font-merriweather",
+  weight: ["400", "700"],
+  variable: "--font-domine",
 });
 
 function Title() {
   return (
-    <motion.div
-      initial={{ x: -80, opacity: 0 }} // bắt đầu từ trái
-      animate={{ x: 0, opacity: 1 }} // trượt vào vị trí
-      transition={{ duration: 0.8, ease: "easeOut" }}
-    >
-      <Box
-        sx={{
-          fontFamily: "Inter, sans-serif !important",
-          display: "flex",
-          alignItems: "center",
-          gap: 4,
+    <Box sx={{ width: "30%" }}>
+      <motion.div
+        initial={{ opacity: 0, filter: "blur(10px)", scale: 0.96 }}
+        animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
+        transition={{
+          duration: 1.8,
+          ease: [0.4, 0.0, 0.2, 1],
         }}
       >
-        <Typography
-          sx={{
-            fontFamily: "Inter, sans-serif !important",
-            color: "white",
-            fontSize: "60px",
-            fontWeight: "bold",
-          }}
-        >
-          VOTE
-        </Typography>
-
-        <Typography
-          sx={{
-            fontFamily: "Inter, sans-serif !important",
-            color: "white",
-            fontSize: "60px",
-            fontWeight: "bold",
-          }}
-        >
-          CHO
-        </Typography>
-      </Box>
-
-      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-        <Typography
-          sx={{
-            fontFamily: "Inter, sans-serif !important",
-            color: "white",
-            fontSize: "40px",
-            fontWeight: "bold",
-          }}
-        >
-          BÍNH
-        </Typography>
-
-        <Typography
-          sx={{
-            fontFamily: "Inter, sans-serif !important",
-            color: "white",
-            fontSize: "40px",
-            fontWeight: "bold",
-          }}
-        >
-          BÈ
-        </Typography>
-        <Typography
-          sx={{
-            fontFamily: "Inter, sans-serif !important",
-            color: "white",
-            fontSize: "40px",
-            fontWeight: "bold",
-          }}
-        >
-          CHƯA?
-        </Typography>
-      </Box>
-    </motion.div>
+        <img
+          src="/title.png"
+          style={{ width: "100%" }}
+          alt="title"
+        />
+      </motion.div>
+    </Box>
   );
 }
 

@@ -10,7 +10,7 @@ export const navbars: Navbar[] = [
         path: '/youtube'
     },
     {
-        label: "spotify",
-        path: "/spotify"
+        label: "bé voi say hi",
+        path: "/sayhi"
     },
 ]

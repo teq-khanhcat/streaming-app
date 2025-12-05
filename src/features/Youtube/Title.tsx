@@ -24,6 +24,7 @@ export default function Title() {
         style={{
           ...baseStyle,
           background: "linear-gradient(90deg, #a3d9a5, #8abf8f, #b7d3a3)",
+          // background: "linear-gradient(90deg, #0a1f44, #1e3a8a, #ffffff)",
           backgroundSize: "200%",
           WebkitBackgroundClip: "text",
           color: "transparent",
@@ -42,6 +43,7 @@ export default function Title() {
         style={{
           ...baseStyle,
           background: "linear-gradient(90deg, #d46c6c, #c04848, #d88484)",
+          // background: "linear-gradient(90deg, #1e3a8a, #0a1f44, #ffffff)",
           backgroundSize: "200%",
           WebkitBackgroundClip: "text",
           color: "transparent",
